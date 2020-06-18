@@ -18,7 +18,7 @@ public class Driver
 	{
 		try
 		{
-			JDA api = new JDABuilder(AccountType.BOT).setToken("NzE5OTU3MTczMTg2MDY4NTIy.Xt_Bvg.XMOESaY0GpKKySy7g3oM_JGhHug")
+			JDA api = new JDABuilder(AccountType.BOT).setToken("*****token goes here*********")
 					.setActivity(Activity.listening("you...")).build();
 			//.setActivity(Activity.listening("")
 
