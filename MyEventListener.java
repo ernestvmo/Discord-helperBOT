@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -14,7 +15,7 @@ public class MyEventListener extends ListenerAdapter {
 	List<UserProblem> problems = new ArrayList<>(); // TODO change to HashMap
 	private int count=0;
 	
-	public void onMessageReceived(MessageReceivedEvent e)
+	public void onGuildMessageReceived(GuildMessageReceivedEvent e)
 	{
 		if (e.getAuthor().isBot())
 			return;
@@ -33,7 +34,7 @@ public class MyEventListener extends ListenerAdapter {
 		{
 			StringBuilder sb = new StringBuilder();
 			
-			sb.append("Here are the bot's commands:\n\n");//TODO
+			sb.append("Here are the bot's commands:\n\n");
 			sb.append("`!solve`");
 			sb.append("\nThis command allows you to reply to an issue from the problems list.\nTo reply, you have to type `!solve #` followed by the issue's ID, then followed by your reply.\nPlease note that once you reply to the issue, it will be marked as solved and removed from the list.\n\n");
 			sb.append("`!del`");
@@ -158,12 +159,20 @@ public class MyEventListener extends ListenerAdapter {
 		}
 		
 		Message message = event.getMessage();
-		String messageContent = message.getContentRaw();
-		
+		String messageContent = message.getContentDisplay();
 		MessageChannel mc = event.getChannel();
 		
+		if (!messageContent.contains("!plist") && !messageContent.contains("!solve") && !messageContent.contains("!del") && !messageContent.contains("!command"))
+		{
 			mc.sendMessage("Votre message a été pris en compte, vous recevrez une réponse bientot.").queue();
 			forwardMessage(message);
+		}
+		else
+		{
+			mc.sendMessage("Your message was blocked because it contains a potential command.").queue();
+			return;
+		}
+		
 	}
 	
 	private void forwardMessage(Message message) 
